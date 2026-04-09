@@ -31,10 +31,10 @@ jobs:
         site: ["sites/site-with-errors"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd
+        uses: ruby/setup-ruby@e65c17d16e57e481586a6a5a0282698790062f92
         with:
           ruby-version: "3.4"
           bundler-cache: true
