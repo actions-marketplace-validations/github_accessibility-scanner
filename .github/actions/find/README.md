@@ -19,12 +19,35 @@ https://primer.style/octicons/
 
 **Optional** Stringified JSON object containing `username`, `password`, `cookies`, and/or `localStorage` from an authenticated session. For example: `{"username":"some-user","password":"correct-horse-battery-staple","cookies":[{"name":"theme-preference","value":"light","domain":"primer.style","path":"/"}],"localStorage":{"https://primer.style":{"theme-preference":"light"}}}`
 
+#### `reduced_motion`
+
+**Optional** Playwright
+[`reducedMotion`](https://playwright.dev/docs/api/class-browser#browser-new-context-option-reduced-motion)
+configuration option.
+
+#### `color_scheme`
+
+**Optional** Playwright
+[`colorScheme`](https://playwright.dev/docs/api/class-browser#browser-new-context-option-color-scheme)
+configuration option.
+
+#### `include_screenshots`
+
+**Optional** Bool - whether to capture screenshots of scanned pages and include links to them in the issue
+
+#### `scans`
+
+**Optional** Stringified JSON array of scans to perform. Core engines and local plugins use string names.
+Allowlisted NPM plugins use an object with `name`, `package`, and optional `version`. If not provided, only Axe
+will be performed. See [the plugin docs](../../../PLUGINS.md#loading-plugins-from-npm-packages) for an example.
+
 ### Outputs
 
-#### `findings`
+#### `findings_file`
 
-List of potential accessibility gaps, as stringified JSON. For example:
+Absolute path to a JSON file containing the list of potential accessibility gaps. The action writes this file to a temporary directory and returns the absolute path. For example: `$RUNNER_TEMP/findings-<uuid>.json`.
 
-```JS
-'[]'
+The file will contain a JSON array of finding objects. For example:
+```json
+[]
 ```

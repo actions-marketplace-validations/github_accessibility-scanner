@@ -1,11 +1,22 @@
-export type Finding = {
-  url: string
+export type FindingNode = {
   html: string
+  target?: string
+}
+
+export type FindingCategory = 'wcag' | 'best-practice' | 'experimental'
+
+export type Finding = {
+  scannerType: string
+  category?: FindingCategory
+  url: string
+  html?: string
+  nodes?: FindingNode[]
   problemShort: string
   problemUrl: string
   solutionShort: string
   solutionLong?: string
   screenshotId?: string
+  ruleId?: string
 }
 
 export type Cookie = {
@@ -30,4 +41,13 @@ export type AuthContextInput = {
   password?: string
   cookies?: Cookie[]
   localStorage?: LocalStorage
+}
+
+export type ReducedMotionPreference = 'reduce' | 'no-preference' | null
+
+export type ColorSchemePreference = 'light' | 'dark' | 'no-preference' | null
+
+export type UrlConfig = {
+  url: string
+  excludeSelectors?: string[]
 }

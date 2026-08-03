@@ -1,8 +1,17 @@
+export type FindingNode = {
+  html: string
+  target?: string
+}
+
+export type FindingCategory = 'wcag' | 'best-practice' | 'experimental'
+
 export type Finding = {
   scannerType: string
-  ruleId: string
+  category?: FindingCategory
+  ruleId?: string
   url: string
-  html: string
+  html?: string
+  nodes?: FindingNode[]
   problemShort: string
   problemUrl: string
   solutionShort: string
@@ -16,6 +25,14 @@ export type Issue = {
   url: string
   title: string
   state?: 'open' | 'reopened' | 'closed'
+}
+
+export type IssueResponse = {
+  id: number
+  node_id: string
+  number: number
+  html_url: string
+  title: string
 }
 
 export type ResolvedFiling = {
@@ -34,3 +51,8 @@ export type RepeatedFiling = {
 }
 
 export type Filing = ResolvedFiling | NewFiling | RepeatedFiling
+
+export type FindingGroupIssue = {
+  url: string
+  id: number
+}

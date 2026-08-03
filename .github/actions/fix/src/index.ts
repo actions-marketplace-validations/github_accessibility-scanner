@@ -1,4 +1,6 @@
 import type {Issue as IssueInput, Fixing} from './types.d.js'
+import fs from 'node:fs'
+import path from 'node:path'
 import process from 'node:process'
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/core'
@@ -11,14 +13,18 @@ const OctokitWithThrottling = Octokit.plugin(throttling)
 
 export default async function () {
   core.info("Started 'fix' action")
-  const issues: IssueInput[] = JSON.parse(core.getInput('issues', {required: true}) || '[]')
+  const issuesFile = core.getInput('issues_file', {required: true})
+  const issues: IssueInput[] = JSON.parse(fs.readFileSync(issuesFile, 'utf8'))
   const repoWithOwner = core.getInput('repository', {required: true})
   const token = core.getInput('token', {required: true})
-  core.debug(`Input: 'issues: ${JSON.stringify(issues)}'`)
+  const baseUrl = core.getInput('base_url', {required: false}) || undefined
+  core.debug(`Input: 'issues_file: ${issuesFile}'`)
   core.debug(`Input: 'repository: ${repoWithOwner}'`)
+  core.debug(`Input: 'base_url: ${baseUrl ?? '(default)'}'`)
 
   const octokit = new OctokitWithThrottling({
     auth: token,
+    baseUrl,
     throttle: {
       onRateLimit: (retryAfter, options, octokit, retryCount) => {
         octokit.log.warn(`Request quota exhausted for request ${options.method} ${options.url}`)
@@ -56,7 +62,10 @@ export default async function () {
     }
   }
 
-  core.setOutput('fixings', JSON.stringify(fixings))
-  core.debug(`Output: 'fixings: ${JSON.stringify(fixings)}'`)
+  const fixingsPath = path.join(process.env.RUNNER_TEMP || '/tmp', `fixings-${crypto.randomUUID()}.json`)
+  fs.writeFileSync(fixingsPath, JSON.stringify(fixings))
+  core.setOutput('fixings_file', fixingsPath)
+
+  core.debug(`Output: 'fixings_file: ${fixingsPath}'`)
   core.info("Finished 'fix' action")
 }

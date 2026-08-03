@@ -1,27 +1,39 @@
-name: "Find"
-description: "Finds potential accessibility gaps."
+name: 'Find'
+description: 'Finds potential accessibility gaps.'
 
 inputs:
   urls:
-    description: "Newline-delimited list of URLs to check for accessibility issues"
-    required: true
+    description: 'Newline-delimited list of URLs to check for accessibility issues'
+    required: false
     multiline: true
+  url_configs:
+    description: "Stringified JSON array of URL config objects, each with a 'url' field and an optional 'excludeSelectors' field (array of CSS selectors to exclude from the Axe scan for that URL). When provided, takes precedence over the 'urls' input."
+    required: false
   auth_context:
     description: "Stringified JSON object containing 'username', 'password', 'cookies', and/or 'localStorage' from an authenticated session"
     required: false
   include_screenshots:
-    description: "Whether to capture screenshots of scanned pages and include links to them in the issue"
+    description: 'Whether to capture screenshots of scanned pages and include links to them in the issue'
     required: false
-    default: "false"
+    default: 'false'
+  scans:
+    description: "Stringified JSON array of scans to perform. Core engines are 'axe' and 'accesslint'. Any other entry is either a plugin name (string) or, for a first-party NPM-published plugin, an object with 'name', 'package', and optional 'version'. If not provided, only Axe will be performed"
+    required: false
+  reduced_motion:
+    description: 'Playwright reducedMotion setting: https://playwright.dev/docs/api/class-browser#browser-new-page-option-reduced-motion'
+    required: false
+  color_scheme:
+    description: 'Playwright colorScheme setting: https://playwright.dev/docs/api/class-browser#browser-new-context-option-color-scheme'
+    required: false
 
 outputs:
-  findings:
-    description: "List of potential accessibility gaps, as stringified JSON"
+  findings_file:
+    description: 'Path to a JSON file containing the list of potential accessibility gaps'
 
 runs:
-  using: "node24"
-  main: "bootstrap.js"
+  using: 'node24'
+  main: 'bootstrap.js'
 
 branding:
-  icon: "compass"
-  color: "blue"
+  icon: 'compass'
+  color: 'blue'
